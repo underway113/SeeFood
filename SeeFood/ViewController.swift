@@ -7,12 +7,85 @@
 //
 
 import UIKit
+import CoreML
+import Vision
 
-class ViewController: UIViewController {
-
+class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
+    @IBOutlet weak var ImageView: UIImageView!
+    
+    //Variable Display
+    @IBOutlet weak var txtObjectPredict1: UILabel!
+    @IBOutlet weak var txtObjectPredict2: UILabel!
+    @IBOutlet weak var txtObjectPredict3: UILabel!
+    
+    @IBOutlet weak var txtConf1: UILabel!
+    @IBOutlet weak var txtConf2: UILabel!
+    @IBOutlet weak var txtConf3: UILabel!
+    
+    
+    @IBOutlet var txtObjectCollection: [UILabel]!
+    @IBOutlet var txtConfCollection: [UILabel]!
+    
+    
+    let imagePicker = UIImagePickerController()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        
+        imagePicker.delegate = self
+        imagePicker.sourceType = .camera
+        imagePicker.allowsEditing = false
+        
+    }
+    
+    @IBAction func cameraTapped(_ sender: UIBarButtonItem) {
+        present(imagePicker, animated: true, completion: nil)
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        if let userPickedimage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
+            ImageView.image = userPickedimage
+            
+            guard let ciImage = CIImage(image: userPickedimage) else {
+                fatalError("Could not conver to CIIMAGE")
+            }
+            detect(ciImage)
+            
+        }
+        
+        imagePicker.dismiss(animated: true, completion: nil)
+    }
+    
+    
+    func detect(_ image:CIImage) {
+        
+        guard let model = try? VNCoreMLModel(for: Inceptionv3().model) else {
+            fatalError("Loading CoreML Model Failed")
+        }
+        
+        let request = VNCoreMLRequest(model: model) { (req, err) in
+            guard let results = req.results as? [VNClassificationObservation] else {
+                fatalError("Model Failed to process image")
+            }
+            
+//            print(results)
+            
+            for (index, item) in self.txtObjectCollection.enumerated() {
+                item.text = results[index].identifier.capitalized.components(separatedBy: ",")[0]
+                self.txtConfCollection[index].text = String(format: "%.2f%%",  results[index].confidence*100)
+            }
+            
+        }
+        
+        let handler = VNImageRequestHandler(ciImage: image)
+        
+        do {
+            try handler.perform([request])
+        }
+        catch {
+            print(error)
+        }
     }
 
 
