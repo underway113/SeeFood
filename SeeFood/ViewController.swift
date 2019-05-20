@@ -14,19 +14,10 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     @IBOutlet weak var ImageView: UIImageView!
     
-    //Variable Display
-    @IBOutlet weak var txtObjectPredict1: UILabel!
-    @IBOutlet weak var txtObjectPredict2: UILabel!
-    @IBOutlet weak var txtObjectPredict3: UILabel!
-    
-    @IBOutlet weak var txtConf1: UILabel!
-    @IBOutlet weak var txtConf2: UILabel!
-    @IBOutlet weak var txtConf3: UILabel!
-    
+    //Collection Variable Display    
     
     @IBOutlet var txtObjectCollection: [UILabel]!
     @IBOutlet var txtConfCollection: [UILabel]!
-    
     
     let imagePicker = UIImagePickerController()
     
