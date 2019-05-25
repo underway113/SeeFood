@@ -51,16 +51,24 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     func detect(_ image:CIImage) {
         
-        guard let model = try? VNCoreMLModel(for: Inceptionv3().model) else {
+        //Using Model Inceptionv3
+//        guard let model = try? VNCoreMLModel(for: Inceptionv3().model) else {
+//            fatalError("Loading CoreML Model Failed")
+//        }
+        
+        //Using CreateML Model Cat vs Dog
+        guard let model = try? VNCoreMLModel(for: cat_dog_20iter_98_95eval_1().model) else {
             fatalError("Loading CoreML Model Failed")
         }
+
         
         let request = VNCoreMLRequest(model: model) { (req, err) in
             guard let results = req.results as? [VNClassificationObservation] else {
                 fatalError("Model Failed to process image")
             }
             
-//            print(results)
+            //Print Results
+            print(results)
             
             for (index, item) in self.txtObjectCollection.enumerated() {
                 item.text = results[index].identifier.capitalized.components(separatedBy: ",")[0]

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		465A74D62299877A00F245D7 /* cat_dog_20iter_98.95eval.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 465A74D52299877A00F245D7 /* cat_dog_20iter_98.95eval.mlmodel */; };
 		46EFB7E62292AA4000AE05F0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46EFB7E52292AA4000AE05F0 /* AppDelegate.swift */; };
 		46EFB7E82292AA4000AE05F0 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46EFB7E72292AA4000AE05F0 /* ViewController.swift */; };
 		46EFB7EB2292AA4000AE05F0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 46EFB7E92292AA4000AE05F0 /* Main.storyboard */; };
@@ -16,6 +17,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		465A74D52299877A00F245D7 /* cat_dog_20iter_98.95eval.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = cat_dog_20iter_98.95eval.mlmodel; sourceTree = "<group>"; };
 		46EFB7E22292AA4000AE05F0 /* SeeFood.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SeeFood.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		46EFB7E52292AA4000AE05F0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		46EFB7E72292AA4000AE05F0 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -63,6 +65,7 @@
 				46EFB7EE2292AA4200AE05F0 /* LaunchScreen.storyboard */,
 				46EFB7F12292AA4200AE05F0 /* Info.plist */,
 				46EFB7F72292AAB700AE05F0 /* Inceptionv3.mlmodel */,
+				465A74D52299877A00F245D7 /* cat_dog_20iter_98.95eval.mlmodel */,
 			);
 			path = SeeFood;
 			sourceTree = "<group>";
@@ -138,6 +141,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				465A74D62299877A00F245D7 /* cat_dog_20iter_98.95eval.mlmodel in Sources */,
 				46EFB7E82292AA4000AE05F0 /* ViewController.swift in Sources */,
 				46EFB7F82292AAB700AE05F0 /* Inceptionv3.mlmodel in Sources */,
 				46EFB7E62292AA4000AE05F0 /* AppDelegate.swift in Sources */,
