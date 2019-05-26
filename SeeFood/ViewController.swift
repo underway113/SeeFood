@@ -7,11 +7,12 @@
 //
 
 import UIKit
-import CoreML
 import Vision
+
 
 class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIPickerViewDelegate, UIPickerViewDataSource {
     
+    //UI Element
     @IBOutlet weak var ImageView: UIImageView!
     @IBOutlet weak var pickerViewModel: UIPickerView!
     
@@ -23,18 +24,28 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     var modelSelected:MLModel = MLModel()
     let modelCollection:[String:MLModel] =
-        [
-            "Inceptionv3":Inceptionv3().model,
-            "Cat vs Dog":cat_dog_20iter_98_95eval_1().model
+    [
+        "Age - (AgeNet)" : AgeNet().model,
+        "Food - (Food101)" : Food101().model,
+        "Gender - (GenderNet)" : GenderNet().model,
+        "NSFW - (Nudity)" : Nudity().model,
+        "Object - (Inceptionv3 Acc:94,4)" : Inceptionv3().model,
+        "Object - (MobileNet Acc:89,9)" : MobileNet().model,
+        "Object - (Resnet50 Acc:92,2)" : Resnet50().model,
+        "Object - (VGG16 Acc:92,6)" : VGG16().model,
+        "Pet - (CatDog Acc:98,9)" : cat_dog_20iter_98_95eval_1().model,
+        "Scene - (GoogLeNetPlaces Acc:85,4)" : GoogLeNetPlaces().model
+        
     ]
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        //For Picker View Model
         pickerViewModel.delegate = self
         pickerViewModel.dataSource = self
     
-        
+        //For ImagePicker as Camera
         imagePicker.delegate = self
         imagePicker.sourceType = .camera
         imagePicker.allowsEditing = false
@@ -45,6 +56,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         
     }
     
+    //Camera Button Pressed
     @IBAction func cameraTapped(_ sender: UIBarButtonItem) {
         present(imagePicker, animated: true, completion: nil)
     }
@@ -54,10 +66,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         if let userPickedimage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
             ImageView.image = userPickedimage
             
-            guard let ciImage = CIImage(image: userPickedimage) else {
-                fatalError("Could not conver to CIIMAGE")
-            }
-            detect(ciImage)
+        
+            detect(ImageView.image!)
             
         }
         
@@ -81,19 +91,24 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         modelSelected = [MLModel](modelCollection.values)[row]
+        if let image = ImageView.image {
+            detect(image)
+        }
     }
+    
     //
     
     //Detect Picture
-    func detect(_ image:CIImage) {
-        print(modelSelected)
+    func detect(_ image:UIImage) {
+        guard let ciImage = CIImage(image: image) else {
+            fatalError("Could not convert to CIIMAGE")
+        }
         
         //Using CreateML Model Cat vs Dog
         guard let model = try? VNCoreMLModel(for: modelSelected) else {
             fatalError("Loading CoreML Model Failed")
         }
 
-        
         let request = VNCoreMLRequest(model: model) { (req, err) in
             guard let results = req.results as? [VNClassificationObservation] else {
                 fatalError("Model Failed to process image")
@@ -109,7 +124,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             
         }
         
-        let handler = VNImageRequestHandler(ciImage: image)
+        let handler = VNImageRequestHandler(ciImage: ciImage)
         
         do {
             try handler.perform([request])
@@ -122,4 +137,3 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
 
 
 }
-
